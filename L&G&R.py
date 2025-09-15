@@ -31,8 +31,8 @@ def smooth_signal(signal, window=5):
     Tasaa signaalia liukuvalla keskiarvolla säilyttäen alkuperäisen pituuden.
     Parametrit:
      - signal: Ultraäänennopeuden mittausarvot
-     - window: Ikkunakoko keskiarvon laskemiseen -- määrittää,
-     kuinka monta peräkkäistä arvoa otetaan huomioon keskiarvoa laskettaessa.
+     - window: Ikkunakoko keskiarvon laskemiseen 
+         -- määrittää, kuinka monta peräkkäistä arvoa otetaan huomioon keskiarvoa laskettaessa.
     Palauttaa:
      - Tasoitettu alkuperäisen pituinen signaali
     """
@@ -741,10 +741,3 @@ ax1.set_xlabel("Time [min]")
 fig_extra.tight_layout()
 
 plt.show()
-
-
-
-
-
-
-
