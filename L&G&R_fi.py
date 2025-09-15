@@ -380,7 +380,7 @@ def get_derivatives_by_model(t, y, popt, model_type):
      - popt: Sovitetut parametrit
      - model_type: Mallin tyyppi ('logistic', 'gompertz' tai 'richards')
     Palauttaa:
-     - y_fit: Mallin tuottama sovitettu signaali
+     - y_fit: Mallin tuottama sovitus
      - dy_fit: Mallin derivaatta
      - component_derivs: Jokaisen komponentin derivaatta erikseen
     """
@@ -403,11 +403,11 @@ def get_derivatives_by_model(t, y, popt, model_type):
 
 def compute_peak_areas(signal, peaks, left_ips, right_ips):
     """
-    Compute the area under each peak defined by `left_ips` and `right_ips` in the given signal.
+    Laskee kunkin piikin alla olevan pinta-alan, joka on määritelty välillä `left_ips` ja `right_ips`.
 
-    This function iterates over the indices of the peaks, and for each peak, it calculates the
-    area under the curve within the boundaries defined by `left_ips` and `right_ips`. The area
-    is calculated using the trapezoidal rule for numerical integration.
+    Tämä funktio iteroi piikkien indeksien yli ja laskee jokaiselle piikille
+    käyrän alla olevan pinta-alan `left_ips` ja `right_ips` määrittelemien rajojen sisällä. 
+    Pinta-ala lasketaan käyttämällä numeerisen integroinnin trapetsisääntöä.
     """
     areas = []
     for i in range(len(peaks)):
@@ -530,7 +530,7 @@ upv_sorted_peaks = upv_peaks[upv_sorted_indices]
 upv_component_peaks = upv_sorted_peaks[:len(component_derivs)]
 
 # Tulostetaan piikit tärkeysjärjestyksessä
-print(f"        Acceleration peaks: {upv_component_peaks}")
+print(f"        Kiihtyvyyden piikit: {upv_component_peaks}")
 
 """ Kalorimetridata """
 
@@ -555,7 +555,7 @@ cm_sorted_peaks = cm_peaks[cm_sorted_indices]
 cm_component_peaks = cm_sorted_peaks[:len(component_derivs)]
 
 # Tulostetaan lämpövuopiikit tärkeysjärjestyksessä
-print(f"        Calorimetry peaks: {cm_component_peaks}")
+print(f"        Lämpövuopiikit: {cm_component_peaks}")
 
 # Piikkien puolivälileveydet
 widths_upv, _, left_ips_upv, right_ips_upv = peak_widths(dy_fit, upv_component_peaks, rel_height=0.5)
@@ -637,12 +637,12 @@ axs[0, 1].legend()
 axs[0, 1].text(0.05, 0.90, f"MSED = {best_mse_deriv:.2f}",
                transform=axs[0, 1].transAxes, fontsize=10, verticalalignment='top')
 
-# 3. Kuvaaja: Sovituksen ja komponenttien derivaatat
+# 3. Kuvaaja: Sovituksen ja komponenttien derivaatat sekä numeerinen derivaatta
 for i, deriv in enumerate(component_derivs):
     axs[1, 0].plot(t, deriv, linestyle='--', label=f'Component {i + 1}')
 axs[1, 0].plot(t, dy_fit, color='black', linewidth=2, label='Total sum')
 axs[1, 0].plot(t, dy, label='Numerical 1st derivative', alpha=0.6)
-axs[1, 0].set_title("Acceleration Components and Their Sum Function")
+axs[1, 0].set_title("Acceleration Components, Sum Function, and Numerical Derivative")
 axs[1, 0].set_xlabel("Time [min]")
 axs[1, 0].set_yscale('symlog')
 axs[1, 0].set_ylim(0, 1000)
@@ -650,7 +650,7 @@ axs[1, 0].set_ylabel("Acceleration [(m/s)/min]")
 axs[1, 0].legend()
 axs[1, 0].text(0.05, 0.95, f"{model_type} model", transform=axs[1, 0].transAxes, fontsize=10, verticalalignment='top')
 
-# 4. Kuvaaja: Mallin summafunktion derivaatta vs. toisen tiedoston data ja piikit
+# 4. Kuvaaja: Kiihtyvyys, Lämpövuo ja Vicat
 
 # Kaksi pystyakselia
 ax1 = axs[1, 1]
@@ -686,16 +686,13 @@ lines_labels = [ax.get_legend_handles_labels() for ax in [ax1, ax2, ax3]]
 lines, labels = [sum(lol, []) for lol in zip(*lines_labels)]
 ax1.legend(lines, labels, loc='upper right')
 
-# Vasemman akselin säätö
-# ax1.set_ylim(0, 50)  # Muokkaa tuotteen mukaan! nykyisille [10, 50, 40, 20, 100, 20]
-
 ax1.set_title("Ultrasonic Acceleration, Thermal Power and Vicat Penetration")
 ax1.set_xlabel("Time [min]")
 
 plt.tight_layout(h_pad=4.0)
 plt.subplots_adjust(top=0.95, bottom=0.07)
 
-# Komponenttikuvaaja
+# Erillinen komponenttikuvaaja
 fig_single, ax_single = plt.subplots()
 for i, deriv in enumerate(component_derivs):
     ax_single.plot(t, deriv, linestyle='--', label=f'Component {i + 1}')
@@ -708,7 +705,7 @@ ax_single.set_ylabel("Acceleration [(m/s)/min]")
 ax_single.legend()
 # ax_single.text(0.05, 0.95, f"{model_type} model", transform=ax_single.transAxes, fontsize=10, verticalalignment='top')
 
-# Tuloskuvaaja
+# Erillinen yhteenvetokuvaaja
 fig_extra, ax1 = plt.subplots(figsize=(8, 6))
 
 ax1.plot(t, y, color='blue', label='Ultrasonic Testing')
@@ -740,4 +737,5 @@ ax1.set_xlabel("Time [min]")
 fig_extra.tight_layout()
 
 plt.show()
+
 
