@@ -26,7 +26,7 @@ def detect_and_trim_stable_tail(t, y, window=10, std_threshold=0.05):
             return t[:i], y[:i]
     return t, y
 
-def smooth_signal(signal, window=5):
+def smooth_signal(signal, window):
     """
     Tasaa signaalia liukuvalla keskiarvolla säilyttäen alkuperäisen pituuden.
     Parametrit:
@@ -295,16 +295,15 @@ def compute_aic(y, y_fit, p):
 
 def adjusted_r2(y_true, y_pred, p):
     """
-    Calculates the adjusted R-squared value for a given set of true values,
-    predicted values, and the number of predictors in the model. Adjusted
-    R-squared takes into account the number of predictors to provide a
-    better evaluation metric for models with different numbers of features.
+    Laskee korjatun R-neliösumman arvon annetulle joukolle todellisia arvoja,
+    ennustettuja arvoja ja mallin ennustajien lukumäärälle. Korjattu
+    R-neliösumma ottaa huomioon ennustajien lukumäärän, jotta se tarjoaa
+    paremman arviointimetriikan malleille, joissa on eri määrä ominaisuuksia.
 
-    The formula used for adjusted R-squared is:
+    Korjatun R-neliösumman laskentakaava on:
         R²_adj = 1 - [(SSE_res / (n - p)) / (SSE_tot / (n - 1))]
-    Where SSE_res is the sum of squared residuals, SSE_tot is the total sum
-    of squares, n is the number of observations, and p is the number of
-    predictors.
+    Jossa SSE_res on neliöllisten jäännösten summa, SSE_tot on neliöiden kokonaissumma, 
+    n on havaintojen lukumäärä ja p on ennustajien lukumäärä.
     """
 
     n = len(y_true)
@@ -741,3 +740,4 @@ ax1.set_xlabel("Time [min]")
 fig_extra.tight_layout()
 
 plt.show()
+
