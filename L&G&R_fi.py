@@ -630,7 +630,7 @@ axs[0, 0].text(0.05, 0.95, f"Removed points: {poistettuja}\nMSE = {mean_squared_
 # 2. Kuvaaja: Sovitteen derivaatta vs. numeerinen derivaatta
 axs[0, 1].plot(t, dy, label='Numerical 1st derivative', alpha=0.6)
 axs[0, 1].plot(t, dy_fit, label='Derivative of the model', linewidth=2)
-axs[0, 1].set_title("Acceleration Estimation: Numerical vs. Modeled Derivative")
+axs[0, 1].set_title("Acceleration Estimation: Numerical vs. Model Derivative")
 axs[0, 1].set_ylabel("Acceleration [(m/s)/min]")
 axs[0, 1].set_xlabel("Time [min]")
 axs[0, 1].legend()
@@ -737,5 +737,6 @@ ax1.set_xlabel("Time [min]")
 fig_extra.tight_layout()
 
 plt.show()
+
 
 
